@@ -26,7 +26,10 @@ float sensor[NUMBER_OF_DEVICES];
 unsigned int const dsMeassureInterval=750; //inteval between meassurements
 unsigned long lastMeasTime=0;
 
-float versionSW=0.41;
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(10, 11); // RX, TX
+
+float versionSW=0.1;
 char versionSWString[] = "TeplomerUART v"; //SW name & version
 
 void dsInit(void);
@@ -36,6 +39,9 @@ void setup() {
   Serial.begin(115200);
   Serial.println(versionSW);
   #endif
+	
+	mySerial.begin(4800);
+  mySerial.println("Hello, world?");
 
   dsInit();
 }
@@ -62,7 +68,22 @@ void loop() {
         }
       }
       sensor[i] = tempTemp;
+			
+	
+			for (byte j=0; j<8; j++) {
+				if (tempDeviceAddresses[i][j]<16) {
+					mySerial.print(0,HEX);
+					Serial.print(0,HEX);
+				}
+					mySerial.print(tempDeviceAddresses[i][j],HEX);
+					Serial.print(tempDeviceAddresses[i][j],HEX);
+			}
+			
+      Serial.print("-");
+			mySerial.print("-");
       Serial.println(sensor[i]);
+			mySerial.println(sensor[i]);
+			
     } 
   }
 }
