@@ -1,0 +1,1 @@
+mereni teplot DALLAS a posilani mereni na UART
